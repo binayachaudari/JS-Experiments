@@ -113,23 +113,33 @@ for (image of imageCollection) {
 
 let listOfIndicator = document.querySelectorAll('.dots-wrapper .indicator');
 
+let isTransiting = false;
 /**
  * INDICATES CURRENT IMAGE
  */
 let currentImageIndicator = () => {
   listOfIndicator.forEach((eachIndicator, index) => {
     eachIndicator.style.background = INACTIVE_CAROUSEL_INDICATOR_BG_COLOR;
+
     eachIndicator.addEventListener('click', (e) => {
-      listOfIndicator[currentIndex - 1].style.background = INACTIVE_CAROUSEL_INDICATOR_BG_COLOR;
-      currentIndex = carouselTransition(currentIndex, index + 1);
-      listOfIndicator[currentIndex - 1].style.background = ACTIVE_CAROUSEL_INDICATOR_BG_COLOR;
+      if (!isTransiting) {
+        listOfIndicator[currentIndex - 1].style.background = INACTIVE_CAROUSEL_INDICATOR_BG_COLOR;
+        if (currentIndex != index + 1)
+          currentIndex = carouselTransition(currentIndex, index + 1);
+        listOfIndicator[currentIndex - 1].style.background = ACTIVE_CAROUSEL_INDICATOR_BG_COLOR;
+      }
     });
+
     eachIndicator.addEventListener('mouseenter', (e) => {
       clearInterval(autoAnimate);
+      autoAnimate = null;
     });
-    eachIndicator.addEventListener('mouseleave', (e) => {
-      autoAnimate = setInterval(animate, HOLD_DELAY);
-    })
+
+    eachIndicator.addEventListener('mouseout', (e) => {
+      if (!autoAnimate)
+        autoAnimate = setInterval(animate, HOLD_DELAY);
+    });
+
   });
 
   listOfIndicator[currentIndex - 1].style.background = ACTIVE_CAROUSEL_INDICATOR_BG_COLOR;
@@ -146,6 +156,7 @@ let isNextImageReq, isPrevImageReq,
  * @param {Number} nextIndex Next Image Index
  */
 let carouselTransition = (currentIndex, nextIndex) => {
+  isTransiting = true;
   let indexDiff = nextIndex - currentIndex;
   let totalMarginDistance = indexDiff * IMAGE_WIDTH;
   let transitionSpeed = totalMarginDistance / ANIMATION_TIME;
@@ -154,21 +165,23 @@ let carouselTransition = (currentIndex, nextIndex) => {
 
   var transition = setInterval(() => {
     marginLeft -= transitionSpeed;
-
     carouselImageWrapper.style.marginLeft = `${marginLeft}px`;
 
     if (isNextImageReq && marginLeft < -(nextIndex - 1) * IMAGE_WIDTH) {
       clearInterval(transition);
       marginLeft = -(nextIndex - 1) * IMAGE_WIDTH;
       carouselImageWrapper.style.marginLeft = `${marginLeft}px`;
+      isTransiting = false;
     }
 
     if (isPrevImageReq && marginLeft > -(nextIndex - 1) * IMAGE_WIDTH) {
       clearInterval(transition);
       marginLeft = -(nextIndex - 1) * IMAGE_WIDTH;
       carouselImageWrapper.style.marginLeft = `${marginLeft}px`;
+      isTransiting = false;
     }
-  }, 1)
+  }, 1);
+
   return currentIndex = nextIndex;
 
 }
@@ -203,44 +216,49 @@ window.onload = (e) => {
  * PREVIOUS BUTTON CLICK, GOES BACK TO PREVIOUS IMAGE
  */
 prevBtn.addEventListener('click', (e) => {
-  if (currentIndex < 2) {
-    currentIndex = numOfImages;
-    currentIndex = carouselTransition(1, numOfImages);
-  } else {
-    currentIndex = carouselTransition(currentIndex, currentIndex - 1)
+  if (!isTransiting) {
+    if (currentIndex < 2) {
+      currentIndex = numOfImages;
+      currentIndex = carouselTransition(1, numOfImages);
+    } else {
+      currentIndex = carouselTransition(currentIndex, currentIndex - 1);
+    }
   }
   currentImageIndicator();
-
 })
 
 /**
  * NEXT BUTTON CLICK, GOES TO NEXT SLIDE
  */
 nextBtn.addEventListener('click', (e) => {
-  if (currentIndex == numOfImages) {
-    currentIndex = 1;
-    currentIndex = carouselTransition(numOfImages, currentIndex);
-  } else {
-    currentIndex = carouselTransition(currentIndex, currentIndex + 1)
+  if (!isTransiting) {
+    if (currentIndex == numOfImages) {
+      currentIndex = 1;
+      currentIndex = carouselTransition(numOfImages, currentIndex);
+    } else {
+      currentIndex = carouselTransition(currentIndex, currentIndex + 1);
+    }
   }
   currentImageIndicator();
-})
+});
 
 /**
  * PAUSE ANIMATION WHEN HOVERING ON PREV OR NEXT BUTTON
  */
 prevBtn.addEventListener('mouseenter', (e) => {
   clearInterval(autoAnimate);
-})
+  autoAnimate = null;
+});
 
 prevBtn.addEventListener('mouseleave', (e) => {
   autoAnimate = setInterval(animate, HOLD_DELAY);
-})
+});
 
 nextBtn.addEventListener('mouseenter', (e) => {
   clearInterval(autoAnimate);
-})
+  autoAnimate = null;
+});
 
 nextBtn.addEventListener('mouseleave', (e) => {
   autoAnimate = setInterval(animate, HOLD_DELAY);
-})
+});
