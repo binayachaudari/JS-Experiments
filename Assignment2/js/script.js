@@ -195,8 +195,8 @@ let animate = () => {
 let autoAnimate;
 window.onload = (e) => {
   carouselContainer.style.display = 'block';
-  currentImageIndicator();
   autoAnimate = setInterval(animate, HOLD_DELAY);
+  currentImageIndicator();
 }
 
 /**
@@ -231,16 +231,16 @@ nextBtn.addEventListener('click', (e) => {
  */
 prevBtn.addEventListener('mouseenter', (e) => {
   clearInterval(autoAnimate);
-});
+})
 
 prevBtn.addEventListener('mouseleave', (e) => {
   autoAnimate = setInterval(animate, HOLD_DELAY);
-});
+})
 
 nextBtn.addEventListener('mouseenter', (e) => {
   clearInterval(autoAnimate);
-});
+})
 
 nextBtn.addEventListener('mouseleave', (e) => {
   autoAnimate = setInterval(animate, HOLD_DELAY);
-});
+})
