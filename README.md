@@ -1,16 +1,20 @@
-#JS EXPERIMENTS
+# JS EXPERIMENTS
 
-ASSIGNMENT 1(BALL-COLLISION)
-Demo: https://binayachaudari.github.io/box-collision-simulation/
+ASSIGNMENT 1 (BALL-COLLISION)
+
+DEMO: https://binayachaudari.github.io/JS-Experiments/Assignment1/
 
 
-ASSIGNMENT 2(IMAGE-CAROUSEL)
-Demo: https://binayachaudari.github.io/Carousel/
+ASSIGNMENT 2 (IMAGE-CAROUSEL)
+
+https://binayachaudari.github.io/JS-Experiments/Assignment2/
 
 
 ASSIGNMENT 3 (CAR-GAME)
-Demo: https://github.com/binayachaudari/FlappyBird
+
+DEMO: https://binayachaudari.github.io/JS-Experiments/Assignment3/
 
 
 ASSIGNMENT 4 (FLAPPY-BIRD)
-Demo: https://binayachaudari.github.io/FlappyBird/
+
+DEMO: https://binayachaudari.github.io/JS-Experiments/Assignment4/
